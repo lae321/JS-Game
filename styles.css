@@ -1,0 +1,30 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.board {
+  box-sizing: content-box;
+  display: flex;
+  flex-wrap: wrap;
+  width: 320px;
+  height: 320px;
+  margin: 100 auto;
+  border: black solid 3px;
+}
+.board div {
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+}
+.board__snake {
+  background-color: olivedrab;
+}
+.board__apple {
+  background-color: red;
+  border-radius: 50%;
+}
