@@ -10,41 +10,68 @@
 // Query Selectors
 const snake = document.querySelectorAll(".board__snake");
 const apple = document.querySelectorAll(".board__apple");
-const startButton = document.querySelector(".start")
-const scoreCounter = document.querySelector(".score")
+const startButton = document.querySelector(".start");
+const scoreCounter = document.querySelector(".score");
 
 // Variables
 let snakeHeadPosition = 0;
+let applePosition = 0;
 let snakeLength = 2;
 let isDead = false;
 const rowMax = 10;
 
-document.onkeydown = e => {
-  switch (e.keyCode) {
-      case 37:
-          console.log("Left key pressed")
+const newGame = () => {
+  //reset everything
+  snakeHeadPosition = 0;
+  applePosition = 0;
+  snakeLength = 2;
+  isDead = false;
+};
+
+const move = () => {
+    document
+      .querySelectorAll("div")
+      [snakeHeadPosition].classList.remove("board__snake");
+
+    document.onkeydown = (e) => {
+      switch (e.keyCode) {
+        case 37:
+            document
+              .querySelectorAll("div")
+              [snakeHeadPosition - 1].classList.add("board__snake");
+            snakeHeadPosition -= 1;
           break;
-      case 38:
-        console.log("Up key pressed")
+        case 38:
+          document
+            .querySelectorAll("div")
+            [snakeHeadPosition - rowMax].classList.add("board__snake");
+          snakeHeadPosition -= rowMax;
           break;
-      case 39:
-        console.log("Right key pressed")
+        case 39:
+          document
+            .querySelectorAll("div")
+            [snakeHeadPosition + 1].classList.add("board__snake");
+          snakeHeadPosition += 1;
           break;
-      case 40:
-        console.log("Down key pressed")
+        case 40:
+          document
+            .querySelectorAll("div")
+            [snakeHeadPosition + rowMax].classList.add("board__snake");
+          snakeHeadPosition += rowMax;
           break;
-  }
-}
+      }
+    };
+};
+document.addEventListener("keydown", move);
 // const moveRight = () => {
-  
+
 //   for (i = snakeHeadPosition; i < 400; i++) {
 //     let nextCell = board[snakeHeadPosition];
 //     let currCell = board[i]
 //     nextCell.classList.remove("board__snake");
 //     currCell.classList.add("board__snake");
-    
+
 //   }
 // };
-
 
 // moveRight();
