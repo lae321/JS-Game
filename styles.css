@@ -1,10 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 * {
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Press Start 2P", sans-serif;
+  background-color: #85FFBD;
+  background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+}
+
+.snek-logo {
+  display: block;
+  width: 326px;
+  margin: 30 auto;
+}
+
+.info {
+  display: flex;
+  width: 320px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 60 auto 5 auto;
+  color: black;
 }
 
 .board {
@@ -13,7 +31,7 @@ body {
   flex-wrap: wrap;
   width: 320px;
   height: 320px;
-  margin: 100 auto;
+  margin: 10 auto;
   border: black solid 3px;
 }
 .board div {

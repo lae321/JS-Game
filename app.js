@@ -4,8 +4,8 @@
 const board = document.querySelectorAll("div");
 const snake = document.querySelectorAll(".board__snake");
 const apple = document.querySelectorAll(".board__apple");
-const startButton = document.querySelector(".start");
-const scoreCounter = document.querySelector(".score");
+const startButton = document.querySelector(".info__start");
+const scoreCounter = document.querySelector(".info__score");
 
 // Variables
 let snakeArr = [1, 0]; //snakes head will start in position 1 and will be 2 blocks long
@@ -18,7 +18,6 @@ const gridSize = 10;
 let movingDirection = 1; //by default move right from position 1 in board
 
 const newGame = () => {
-  //reset everything
   score = 0;
   snakeArr.forEach((item) => board[item].classList.remove("board__snake"));
   board[applePosition].classList.remove("board__apple");
@@ -32,11 +31,6 @@ const newGame = () => {
 };
 
 startButton.addEventListener("click", newGame);
-
-// TO DO: update class after a certain time period (movement speed)
-// TO DO: update class of multiple divs at once (account for snake length)
-
-// switch
 
 const move = () => {
   document.onkeydown = (e) => {
