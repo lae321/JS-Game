@@ -13,7 +13,7 @@ let snakeHeadPosition = snakeArr[0];
 let snakeStartPosition = 0; // remove snake tail from first box of grid for first movement
 let applePosition = 0;
 let isDead = false;
-let interval = 1000;
+let interval = 750;
 const gridSize = 10;
 let movingDirection = 1; //by default move right from position 1 in board
 
@@ -51,7 +51,7 @@ const move = () => {
   };
 };
 
-document.addEventListener("keydown", move);
+startButton.addEventListener("click", move);
 
 const iterativeMovement = () => {
   // move tail
@@ -65,7 +65,7 @@ const hitWall = () => {
   if (
     (snakeHeadPosition % gridSize === 0 && movingDirection === -1) || // snake hits left
     (snakeHeadPosition % gridSize === gridSize - 1 && movingDirection === 1) || // snake hits right
-    (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) ||
+    (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) || //snake hits top
     (snakeHeadPosition + gridSize >= gridSize * gridSize &&
       movingDirection === gridSize) // snake hits bottom
   ) {
