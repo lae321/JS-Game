@@ -1,77 +1,74 @@
 /// SNAKE \\\
-// 20x20 board made of divs
-// .snake and .apple classes will denote the snake and apple and dictate styling of the appropriate div. Update the class of divs as the snake moves and apples are spawned
-// perhaps treat snake as an array? Push to it when apple is eaten, increasing length by one
-// at the same time, remove the apple from the board and randomly spawn another somewhere on the grid, unoccupied by the snake
-// when apple eaten, score++, increase snake speed
-// movement controlled by arrow keys bound to event listeners - movement that opposes the current direction of movement should be ignored
-// collision with wall or snake itself ends the game
 
 // Query Selectors
+const board = document.querySelectorAll("div");
 const snake = document.querySelectorAll(".board__snake");
 const apple = document.querySelectorAll(".board__apple");
-const startButton = document.querySelector(".start");
-const scoreCounter = document.querySelector(".score");
+const startButton = document.querySelector(".info__start");
+const scoreCounter = document.querySelector(".info__score");
 
 // Variables
-let snakeHeadPosition = 0;
+let snakeArr = [1, 0]; //snakes head will start in position 1 and will be 2 blocks long
+let snakeHeadPosition = snakeArr[0];
+let snakeStartPosition = 0; // remove snake tail from first box of grid for first movement
 let applePosition = 0;
-let snakeLength = 2;
 let isDead = false;
-const rowMax = 10;
+let interval = 1000;
+const gridSize = 10;
+let movingDirection = 1; //by default move right from position 1 in board
 
 const newGame = () => {
-  //reset everything
-  snakeHeadPosition = 0;
+  score = 0;
+  snakeArr.forEach((item) => board[item].classList.remove("board__snake"));
+  board[applePosition].classList.remove("board__apple");
+  snakeStartPosition = 0;
   applePosition = 0;
-  snakeLength = 2;
+  snakeArr = [1, 0];
+  snakeArr.forEach((item) => board[item].classList.add("board__snake"));
   isDead = false;
+  movingDirection = 1;
+  setInterval(iterativeMovement, interval);
 };
+
+startButton.addEventListener("click", newGame);
 
 const move = () => {
-    document
-      .querySelectorAll("div")
-      [snakeHeadPosition].classList.remove("board__snake");
-
-    document.onkeydown = (e) => {
-      switch (e.keyCode) {
-        case 37:
-            document
-              .querySelectorAll("div")
-              [snakeHeadPosition - 1].classList.add("board__snake");
-            snakeHeadPosition -= 1;
-          break;
-        case 38:
-          document
-            .querySelectorAll("div")
-            [snakeHeadPosition - rowMax].classList.add("board__snake");
-          snakeHeadPosition -= rowMax;
-          break;
-        case 39:
-          document
-            .querySelectorAll("div")
-            [snakeHeadPosition + 1].classList.add("board__snake");
-          snakeHeadPosition += 1;
-          break;
-        case 40:
-          document
-            .querySelectorAll("div")
-            [snakeHeadPosition + rowMax].classList.add("board__snake");
-          snakeHeadPosition += rowMax;
-          break;
-      }
-    };
+  document.onkeydown = (e) => {
+    switch (e.keyCode) {
+      case 37:
+        movingDirection = -1;
+        break;
+      case 38:
+        movingDirection = -gridSize;
+        break;
+      case 39:
+        movingDirection = 1;
+        break;
+      case 40:
+        movingDirection = gridSize;
+        break;
+    }
+  };
 };
+
 document.addEventListener("keydown", move);
-// const moveRight = () => {
 
-//   for (i = snakeHeadPosition; i < 400; i++) {
-//     let nextCell = board[snakeHeadPosition];
-//     let currCell = board[i]
-//     nextCell.classList.remove("board__snake");
-//     currCell.classList.add("board__snake");
+const iterativeMovement = () => {
+  // move tail
+  board[snakeArr.pop()].classList.remove("board__snake");
+  //move head
+  snakeArr.unshift(snakeArr[0] + movingDirection);
+  board[snakeArr[0]].classList.add("board__snake");
+};
 
-//   }
-// };
-
-// moveRight();
+const hitWall = () => {
+  if (
+    (snakeHeadPosition % gridSize === 0 && movingDirection === -1) || // snake hits left
+    (snakeHeadPosition % gridSize === gridSize - 1 && movingDirection === 1) || // snake hits right
+    (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) ||
+    (snakeHeadPosition + gridSize >= gridSize * gridSize &&
+      movingDirection === gridSize) // snake hits bottom
+  ) {
+    return clearInterval(interval); // cancel movement if above happens
+  }
+};
