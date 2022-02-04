@@ -13,9 +13,13 @@ let snakeHeadPosition = snakeArr[0];
 let snakeStartPosition = 0; // remove snake tail from first box of grid for first movement
 let applePosition = 0;
 let isDead = false;
-let interval = 1000;
+let interval = 750;
 const gridSize = 10;
 let movingDirection = 1; //by default move right from position 1 in board
+let gameStarted = false;
+let score = 0;
+let moveInterval = 0;
+let wallInterval = 0
 
 const newGame = () => {
   score = 0;
@@ -26,8 +30,16 @@ const newGame = () => {
   snakeArr = [1, 0];
   snakeArr.forEach((item) => board[item].classList.add("board__snake"));
   isDead = false;
+  gameStarted = false;
   movingDirection = 1;
-  setInterval(iterativeMovement, interval);
+  clearInterval(moveInterval);
+  clearInterval(wallInterval)
+  if (gameStarted === false) {
+    moveInterval = setInterval(iterativeMovement, interval);
+    wallInterval = setInterval(hitWall, interval);
+  }
+  gameStarted = true;
+  
 };
 
 startButton.addEventListener("click", newGame);
@@ -51,24 +63,26 @@ const move = () => {
   };
 };
 
-document.addEventListener("keydown", move);
+startButton.addEventListener("click", move);
 
 const iterativeMovement = () => {
   // move tail
-  board[snakeArr.pop()].classList.remove("board__snake");
-  //move head
-  snakeArr.unshift(snakeArr[0] + movingDirection);
+  board[snakeArr.pop()].classList.remove("board__snake"); // removes tail from current index in board
+  snakeArr.unshift(snakeArr[0] + movingDirection); // adds 1 to snake array in the box equivalent to snakehead[index] + direction
   board[snakeArr[0]].classList.add("board__snake");
+  snakeHeadPosition = snakeArr[0]
 };
 
 const hitWall = () => {
+  console.log(snakeHeadPosition)
   if (
     (snakeHeadPosition % gridSize === 0 && movingDirection === -1) || // snake hits left
     (snakeHeadPosition % gridSize === gridSize - 1 && movingDirection === 1) || // snake hits right
-    (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) ||
+    (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) || //snake hits top
     (snakeHeadPosition + gridSize >= gridSize * gridSize &&
       movingDirection === gridSize) // snake hits bottom
   ) {
-    return clearInterval(interval); // cancel movement if above happens
+    console.log("hit wall");
+    return clearInterval(moveInterval), clearInterval(wallInterval) // cancel movement if above happens
   }
 };
