@@ -1,6 +1,5 @@
 /// SNAKE \\\
 
-// TODO: On start button click, change start to restart. Can you put all the event listeners in one?
 // TODO: when isDead === true, display you lose :( on the game board, possibly by toggling a class applied to board and updating the innertext
 // TODO: Push to snakeArr when apple is eaten
 
@@ -16,7 +15,7 @@ let snakeArr = [1, 0]; //snakes head will start in position 1 and will be 2 bloc
 let snakeHeadPosition = snakeArr[0];
 let applePosition = 0;
 let isDead = false;
-let interval = 750;
+let interval = 500;
 const gridSize = 10;
 let movingDirection = 1; //by default move right from position 1 in board
 let gameStarted = false;
@@ -29,20 +28,26 @@ const move = () => {
   document.onkeydown = (e) => {
     switch (e.keyCode) {
       case 37:
-        movingDirection = -1;
+        if (movingDirection !== 1) {
+          movingDirection = -1;
+        }
         break;
       case 38:
-        movingDirection = -gridSize;
+        if (movingDirection !== gridSize) {
+          movingDirection = -gridSize;
+        }
         break;
       case 39:
-        movingDirection = 1;
+        if (movingDirection !== -1) {
+          movingDirection = 1;
+        }
         break;
       case 40:
+        if (movingDirection !== -gridSize)
         movingDirection = gridSize;
         break;
     }
   };
-  
 };
 
 startButton.addEventListener("click", move);
@@ -89,6 +94,7 @@ const eatApple = () => {
 
 const newGame = () => {
   score = 0;
+  scoreCounter.innerHTML = `Score: ${score}`;
   snakeArr.forEach((item) => board[item].classList.remove("board__snake"));
   board[applePosition].classList.remove("board__apple");
   applePosition = 0;
@@ -97,14 +103,16 @@ const newGame = () => {
   isDead = false;
   gameStarted = false;
   movingDirection = 1;
+  snakeHeadPosition = 1;
   placeApple();
   clearInterval(moveInterval);
   clearInterval(wallInterval);
   clearInterval(eatAppleInterval);
-  wallInterval = setInterval(hitWall, interval); // why did moving this work?
   if (gameStarted === false) {
+    wallInterval = setInterval(hitWall, interval);
     moveInterval = setInterval(iterativeMovement, interval);
     eatAppleInterval = setInterval(eatApple, interval);
+    startButton.innerHTML = "Restart";
   }
   gameStarted = true;
 };
