@@ -1,7 +1,7 @@
 /// SNAKE \\\
 
 // TODO: when isDead === true, display you lose :( on the game board, possibly by toggling a class applied to board and updating the innertext
-// TODO: Push to snakeArr when apple is eaten
+// TODO: cancel movement when snake collides with self
 
 // Query Selectors
 const board = document.querySelectorAll("div");
@@ -43,8 +43,7 @@ const move = () => {
         }
         break;
       case 40:
-        if (movingDirection !== -gridSize)
-        movingDirection = gridSize;
+        if (movingDirection !== -gridSize) movingDirection = gridSize;
         break;
     }
   };
@@ -54,10 +53,21 @@ startButton.addEventListener("click", move);
 
 const iterativeMovement = () => {
   // move tail
-  board[snakeArr.pop()].classList.remove("board__snake"); // removes tail from current index in board
+  const tail = snakeArr.pop();
+  board[tail].classList.remove("board__snake"); // removes tail from current index in board
   snakeArr.unshift(snakeArr[0] + movingDirection); // adds 1 to snake array in the box equivalent to snakehead[index] + direction
   board[snakeArr[0]].classList.add("board__snake");
   snakeHeadPosition = snakeArr[0]; // update the value of snakeHeadPositon to be the same as snakeArr[0]
+
+  // eat apple
+  if (board[snakeHeadPosition].classList.contains("board__apple")) {
+    board[snakeHeadPosition].classList.remove("board__apple");
+    score++;
+    scoreCounter.innerHTML = `Score: ${score}`;
+    placeApple();
+    board[tail].classList.add("board__snake");
+    snakeArr.push(tail);
+  }
 };
 
 const hitWall = () => {
@@ -75,19 +85,11 @@ const hitWall = () => {
 };
 
 const placeApple = () => {
-  // randomly generate index between 0 and 99
-  let randomIndex = Math.floor(Math.random() * 100);
+  let randomIndex = Math.floor(Math.random() * (gridSize * gridSize));
   if (board[randomIndex].classList.contains("board__snake") === false) {
     board[randomIndex].classList.add("board__apple");
     applePosition = randomIndex;
-  }
-};
-
-const eatApple = () => {
-  if (board[snakeHeadPosition].classList.contains("board__apple")) {
-    board[snakeHeadPosition].classList.remove("board__apple");
-    score++;
-    scoreCounter.innerHTML = `Score: ${score}`;
+  } else {
     placeApple();
   }
 };
@@ -107,11 +109,9 @@ const newGame = () => {
   placeApple();
   clearInterval(moveInterval);
   clearInterval(wallInterval);
-  clearInterval(eatAppleInterval);
   if (gameStarted === false) {
     wallInterval = setInterval(hitWall, interval);
     moveInterval = setInterval(iterativeMovement, interval);
-    eatAppleInterval = setInterval(eatApple, interval);
     startButton.innerHTML = "Restart";
   }
   gameStarted = true;
