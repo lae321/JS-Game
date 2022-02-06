@@ -36,6 +36,8 @@ body {
   height: 320px;
   margin: 10 auto;
   border: black solid 3px;
+  font-size: 30px;
+  color: red;
 }
 .board div {
   box-sizing: border-box;
@@ -47,5 +49,17 @@ body {
 }
 .board__apple {
   background-color: red;
-  border-radius: 50%;
+}
+
+.game-over {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.game-over2 {
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.youDied {
+  color: black;
+  text-align: center;
 }

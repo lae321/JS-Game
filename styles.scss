@@ -38,6 +38,8 @@ body {
   height: 320px;
   margin: 10 auto;
   border: black solid 3px;
+  font-size: 30px;
+  color: red;
 
   div {
     box-sizing: border-box;
@@ -51,6 +53,18 @@ body {
 
   &__apple {
     background-color: red;
-    border-radius: 50%;
   }
+}
+
+.game-over {
+  background-color: hsla(0, 0%, 0%, 0.3);
+}
+
+.game-over2 {
+  background-color: hsla(0, 0%, 0%, 0.6);
+}
+
+.youDied {
+  color: black;
+  text-align: center;
 }
