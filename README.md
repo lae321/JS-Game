@@ -7,4 +7,4 @@ Hitting a wall or another part of the snake ends the game, but the user can rest
 
 The logo for the game was made with Adobe Illustrator and the font "Press Start 2P" from Google Fonts, which is used throughout the project.
 
-At the time of writing, my personal high score is 42. See if you can beat it!
+At the time of writing, my personal high score is 48. See if you can beat it!
