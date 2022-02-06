@@ -9,6 +9,7 @@ const snake = document.querySelectorAll(".board__snake");
 const apple = document.querySelectorAll(".board__apple");
 const startButton = document.querySelector(".info__start");
 const scoreCounter = document.querySelector(".info__score");
+const youDied = document.querySelector(".youDied");
 
 // Variables
 let snakeArr = [1, 0]; //snakes head will start in position 1 and will be 2 blocks long
@@ -67,7 +68,7 @@ const iterativeMovement = () => {
     scoreCounter.innerHTML = `Score: ${score}`;
     placeApple();
     board[tail].classList.add("board__snake"); // use tail to add class snake back to the index of board from which it was removed
-    snakeArr.push(tail); 
+    snakeArr.push(tail);
   }
 };
 
@@ -79,12 +80,28 @@ const hitWall = () => {
     (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) || // snake hits top
     (snakeHeadPosition + gridSize >= gridSize * gridSize &&
       movingDirection === gridSize) || // snake hits bottom
-    (board[snakeHeadPosition + movingDirection].classList.contains("board__snake")) // snake hits self
+    board[snakeHeadPosition + movingDirection].classList.contains(
+      "board__snake"
+    ) // snake hits self
   ) {
-    console.log("hit wall")
-    return clearInterval(moveInterval), clearInterval(wallInterval); // cancel movement and hitWall function if above happens
-    // isDead = true;
+    console.log("hit wall");
+    gameOver();
+    clearInterval(moveInterval), clearInterval(wallInterval); // cancel movement and hitWall function if above happen
   }
+};
+
+const gameOver = () => {
+  board.forEach((element) => {
+    if (
+      element.classList.contains("board__snake") === false &&
+      element.classList.contains("board__apple") === false
+    ) {
+      element.classList.add("game-over");
+    } else {
+      element.classList.add("game-over2");
+    }
+  });
+  youDied.innerHTML = "You died :(";
 };
 
 // Randomly places apple on the grid somewhere where the snake isnt
@@ -102,8 +119,13 @@ const placeApple = () => {
 const newGame = () => {
   score = 0;
   scoreCounter.innerHTML = `Score: ${score}`;
+  board.forEach((element) => {
+    element.classList.remove("game-over");
+    element.classList.remove("game-over2");
+  });
   snakeArr.forEach((item) => board[item].classList.remove("board__snake"));
   board[applePosition].classList.remove("board__apple");
+  youDied.innerHTML = "";
   applePosition = 0;
   snakeArr = [1, 0];
   snakeArr.forEach((item) => board[item].classList.add("board__snake"));
