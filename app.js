@@ -1,8 +1,5 @@
 /// SNAKE \\\
 
-// TODO: when isDead === true, display you lose :( on the game board, possibly by toggling a class applied to board and updating the innertext
-// TODO: cancel movement when snake collides with self
-
 // Query Selectors
 const board = document.querySelectorAll("div");
 const snake = document.querySelectorAll(".board__snake");
@@ -18,7 +15,7 @@ let applePosition = 0;
 let isDead = false;
 let interval = 500;
 const gridSize = 10;
-let movingDirection = 1; //by default move right from position 1 in board
+let movingDirection = 1; //by default move right
 let gameStarted = false;
 let score = 0;
 let moveInterval = 0;
@@ -81,15 +78,15 @@ const hitWall = () => {
     (snakeHeadPosition + gridSize >= gridSize * gridSize &&
       movingDirection === gridSize) || // snake hits bottom
     board[snakeHeadPosition + movingDirection].classList.contains(
-      "board__snake"
-    ) // snake hits self
+      "board__snake" // snake hits self
+    )
   ) {
-    console.log("hit wall");
     gameOver();
     clearInterval(moveInterval), clearInterval(wallInterval); // cancel movement and hitWall function if above happen
   }
 };
 
+// Changes styling when you die and displays "you died :("
 const gameOver = () => {
   board.forEach((element) => {
     if (
