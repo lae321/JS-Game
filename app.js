@@ -22,8 +22,8 @@ let gameStarted = false;
 let score = 0;
 let moveInterval = 0;
 let wallInterval = 0;
-let eatAppleInterval = 0;
 
+// Arrow key movement, also prevents backflips
 const move = () => {
   document.onkeydown = (e) => {
     switch (e.keyCode) {
@@ -51,9 +51,10 @@ const move = () => {
 
 startButton.addEventListener("click", move);
 
+// Moves the snake array through the board array and pushes to it when apple eaten
 const iterativeMovement = () => {
   // move tail
-  const tail = snakeArr.pop();
+  const tail = snakeArr.pop(); // tail = index of the snakeArr just removed
   board[tail].classList.remove("board__snake"); // removes tail from current index in board
   snakeArr.unshift(snakeArr[0] + movingDirection); // adds 1 to snake array in the box equivalent to snakehead[index] + direction
   board[snakeArr[0]].classList.add("board__snake");
@@ -65,25 +66,28 @@ const iterativeMovement = () => {
     score++;
     scoreCounter.innerHTML = `Score: ${score}`;
     placeApple();
-    board[tail].classList.add("board__snake");
-    snakeArr.push(tail);
+    board[tail].classList.add("board__snake"); // use tail to add class snake back to the index of board from which it was removed
+    snakeArr.push(tail); 
   }
 };
 
+// If you hit the wall/yourself
 const hitWall = () => {
   if (
     (snakeHeadPosition % gridSize === 0 && movingDirection === -1) || // snake hits left
     (snakeHeadPosition % gridSize === gridSize - 1 && movingDirection === 1) || // snake hits right
     (snakeHeadPosition - gridSize < 0 && movingDirection === -gridSize) || // snake hits top
     (snakeHeadPosition + gridSize >= gridSize * gridSize &&
-      movingDirection === gridSize) // snake hits bottom
+      movingDirection === gridSize) || // snake hits bottom
+    (board[snakeHeadPosition + movingDirection].classList.contains("board__snake")) // snake hits self
   ) {
-    console.log("hit wall");
+    console.log("hit wall")
     return clearInterval(moveInterval), clearInterval(wallInterval); // cancel movement and hitWall function if above happens
     // isDead = true;
   }
 };
 
+// Randomly places apple on the grid somewhere where the snake isnt
 const placeApple = () => {
   let randomIndex = Math.floor(Math.random() * (gridSize * gridSize));
   if (board[randomIndex].classList.contains("board__snake") === false) {
@@ -94,6 +98,7 @@ const placeApple = () => {
   }
 };
 
+// Starts new game, resets all variables and function intervals
 const newGame = () => {
   score = 0;
   scoreCounter.innerHTML = `Score: ${score}`;
