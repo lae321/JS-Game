@@ -14,7 +14,7 @@ body {
 .snek-logo {
   display: block;
   width: 326px;
-  margin: 30 auto;
+  margin: 40 auto 0 auto;
 }
 
 .info {
@@ -22,7 +22,7 @@ body {
   width: 320px;
   align-items: center;
   justify-content: space-between;
-  margin: 60 auto 5 auto;
+  margin: 40 auto 5 auto;
   color: black;
 
   &__start {
